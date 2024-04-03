@@ -53,6 +53,10 @@ static  NSMutableArray *doneArr;
     doneArr = [NSKeyedUnarchiver unarchiveObjectWithData:archiveddoneArr];
     if(doneArr.count == 0){
     [_doneTableV setHidden:YES];
+    }else{
+        [_doneTableV setHidden:NO];
+    [_doneTableV reloadData];
+
     }
 }
 - (void)viewDidAppear:(BOOL)animated{
@@ -172,7 +176,12 @@ static  NSMutableArray *doneArr;
         //adding indoneArr to defualts
         NSData *p = [NSKeyedArchiver archivedDataWithRootObject:doneArr];
         [self->defToDo setObject:p forKey:@"archiveddoneArr"];
+        if(doneArr.count == 0){
+        [_doneTableV setHidden:YES];
+        }else{
         [_doneTableV reloadData];
+
+        }
     }];
     
     UIAlertAction *no = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:nil];

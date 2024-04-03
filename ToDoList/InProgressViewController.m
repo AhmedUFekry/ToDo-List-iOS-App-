@@ -58,6 +58,7 @@ static  NSMutableArray *progressArr;
         [_inporogreesTableView setHidden:YES];
 
     }else{
+        [_inporogreesTableView setHidden:NO];
         [_inporogreesTableView reloadData];
     }
 
@@ -151,20 +152,25 @@ static  NSMutableArray *progressArr;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    
+
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"delete" message:@"are you sure you want to remove!! " preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *yes = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [progressArr removeObjectAtIndex:indexPath.row];
         //adding inprogressArr to defualts
         NSData *p = [NSKeyedArchiver archivedDataWithRootObject:progressArr];
         [self->defToDo setObject:p forKey:@"archivedProgressArr"];
-        [_inporogreesTableView reloadData];
+        if(progressArr.count == 0){
+            [_inporogreesTableView setHidden:YES];
+
+        }else{
+            [_inporogreesTableView reloadData];
+        }
     }];
     
     UIAlertAction *no = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:nil];
     [alert addAction:yes];
     [alert addAction:no];
+
     [self presentViewController:alert animated:YES completion:nil];
 }
 

@@ -24,28 +24,30 @@
     NSMutableArray *searchResultArr;
     NSUInteger numOfRows;
     NSUInteger searchSwitch;
+    NSMutableArray *tasksArr;
     int i;
     
     
 }
-static  NSMutableArray *tasksArr;
+//static  NSMutableArray *tasksArr;
 +(void)initialize{
-    tasksArr = [NSMutableArray new];
+   // tasksArr = [NSMutableArray new];
     
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    tasksArr = [NSMutableArray new];
     task = [Tasks new];
     sellectedTask = [Tasks new];
     defToDo = [NSUserDefaults standardUserDefaults];
     if([defToDo objectForKey:@"tasksArrr"] == nil){
+        tasksArr = [NSMutableArray new];
         archivedArr = [NSKeyedArchiver archivedDataWithRootObject:tasksArr];
         [defToDo setObject:archivedArr forKey:@"tasksArrr"];
     }
 }
 
 - (void)viewWillAppear:(BOOL)animated{
-    searchResultArr = [NSMutableArray new];
     searchSwitch = 0;
     //getting Array from NS defualt
     defToDo = [NSUserDefaults standardUserDefaults];
@@ -78,16 +80,19 @@ static  NSMutableArray *tasksArr;
 }
 
 - (IBAction)SearchButton:(id)sender {
-    for (i=0; i<[tasksArr count]; i++) {
-        if(_searchTextField.text == [[tasksArr objectAtIndex:i]taskTitle]){
+    searchResultArr = [NSMutableArray new];
+    for (NSInteger i = 0; i < [tasksArr count]; i++) {
+        NSString *taskTitle = [[tasksArr objectAtIndex:i] taskTitle];
+        if ([taskTitle rangeOfString:_searchTextField.text].location != NSNotFound) {
             [searchResultArr addObject:[tasksArr objectAtIndex:i]];
         }
     }
-    if(tasksArr.count == 0){
+    if(searchResultArr.count == 0){
         [_toDoTable setHidden:YES];
+        _emptyLabel.text = @"task Not Found";
     }
     searchSwitch = 1;
-    [_toDoTable setHidden:NO];
+    //[_toDoTable setHidden:NO];
     [_toDoTable reloadData];
 }
 
@@ -167,8 +172,7 @@ static  NSMutableArray *tasksArr;
        
         if(tasksArr.count == 0){
             [_toDoTable setHidden:YES];
-            [_emptyLabel setHidden:NO];
-
+            _emptyLabel.text = @"Create New Task";
         }else{
             [_toDoTable reloadData];
         }    }];
