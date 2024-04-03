@@ -174,8 +174,8 @@ static  NSMutableArray *doneArr;
     UIAlertAction *yes = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [doneArr removeObjectAtIndex:indexPath.row];
         //adding indoneArr to defualts
-        NSData *p = [NSKeyedArchiver archivedDataWithRootObject:doneArr];
-        [self->defToDo setObject:p forKey:@"archiveddoneArr"];
+        NSData *v = [NSKeyedArchiver archivedDataWithRootObject:doneArr];
+        [defToDo setObject:v forKey:@"archiveddoneArr"];
         if(doneArr.count == 0){
         [_doneTableV setHidden:YES];
         }else{
